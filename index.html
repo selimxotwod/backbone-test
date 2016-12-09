@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Template page</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+
+    <!-- Templates -->
+
+</head>
+<body>
+<script type="text/template" id="search_template">
+    <label>Recherche</label>
+    <input type="text" id="search_input"/>
+    <input type="button" id="search_button" value="Search"/>
+</script>
+
+<div id="search_container">
+    <p></p>
+</div>
+
+
+<script>
+
+    window.Result = Backbone.Model.extend
+    ({
+        defaults:{
+            "id":null,
+            "name":""
+        }
+    });
+
+    window.ListResults = Backbone.Collection.extend
+    ({
+        model: Result
+    });
+
+    SearchView = Backbone.View.extend
+    ({
+        model: new Result(),
+        // Construtor-like
+        initialize: function () {
+            this.render();
+        },
+        render: function () {
+            // Compile le template
+            var template = _.template($("#search_template").html(), {});
+
+            // Charge dans "el" via une objet jQuery mis en cache par Backbone
+            this.$el.html(template);
+        },
+        events: {
+            "click input[type=button]": "addNew"
+        },
+        addNew: function () {
+            result.set({
+                name: $("#search_input").val()
+            });
+            $("#search_container").append('<p>'+result.get("name")+'</p>');
+        }
+    });
+
+    var search_item = new SearchView({el: $("#search_container")});
+    var result = new Result();
+
+
+</script>
+</body>
+</html>
